@@ -219,24 +219,33 @@ export async function analyzeCodebase(
         // cursor-agent may include additional text, so we need to extract JSON
         const jsonMatch = stdout.match(/\{[\s\S]*\}/);
         if (!jsonMatch) {
-          // If no JSON found, try to parse the entire output
-          const data = JSON.parse(stdout.trim()) as AnalysisData;
           resolve({
-            success: true,
-            data,
+            success: false,
+            error: 'No JSON found in cursor-agent output',
             rawOutput: stdout,
           });
           return;
         }
 
-        const data = JSON.parse(jsonMatch[0]) as AnalysisData;
+        let parsed = JSON.parse(jsonMatch[0]);
+        
+        // cursor-agent wraps the result in a response object with 'result' field
+        // Extract the actual analysis data from the wrapper
+        if (parsed.result && typeof parsed.result === 'string') {
+          // The result is a JSON string inside the wrapper, parse it
+          const resultMatch = parsed.result.match(/\{[\s\S]*\}/);
+          if (resultMatch) {
+            parsed = JSON.parse(resultMatch[0]);
+          }
+        }
+        
+        const data = parsed as AnalysisData;
         resolve({
           success: true,
           data,
           rawOutput: stdout,
         });
       } catch (parseError) {
-        // If JSON parsing fails, return raw output
         resolve({
           success: false,
           error: `Failed to parse cursor-agent output as JSON: ${
