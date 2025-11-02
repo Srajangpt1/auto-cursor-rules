@@ -73,7 +73,10 @@ jobs:
         id: check_changes
         run: |
           if [ -d ".cursor/rules" ]; then
-            git diff --quiet .cursor/rules/ || echo "changed=true" >> $GITHUB_OUTPUT
+            git add .cursor/rules/
+            if ! git diff --cached --quiet .cursor/rules/; then
+              echo "changed=true" >> $GITHUB_OUTPUT
+            fi
           fi
       
       - name: Commit and push changes
@@ -81,7 +84,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .cursor/rules/
           git commit -m "chore: update Cursor rules [skip ci]"
           git push
         env:
