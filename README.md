@@ -38,18 +38,6 @@ npm install auto-cursor-rules --save-dev
 yarn add auto-cursor-rules --dev
 ```
 
-### Global Installation
-
-**Using npm:**
-```bash
-npm install -g auto-cursor-rules
-```
-
-**Using yarn:**
-```bash
-yarn global add auto-cursor-rules
-```
-
 ### Use with npx
 
 ```bash
