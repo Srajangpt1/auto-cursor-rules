@@ -75,30 +75,6 @@ Commands:
   check                 Check if cursor-agent is installed and accessible
 ```
 
-#### Examples
-
-```bash
-# Generate rules with verbose output
-auto-cursor-rules --verbose
-# or with npx
-npx auto-cursor-rules --verbose
-
-# Dry run to see what would be created
-auto-cursor-rules --dry-run
-# or with npx
-npx auto-cursor-rules --dry-run
-
-# Custom output directory
-auto-cursor-rules --output ./.cursor-rules
-# or with npx
-npx auto-cursor-rules --output ./.cursor-rules
-
-# Check if cursor-agent is installed
-auto-cursor-rules check
-# or with npx
-npx auto-cursor-rules check
-```
-
 ### As a Postinstall Script
 
 Add to your `package.json`:
@@ -115,39 +91,6 @@ Add to your `package.json`:
 ```
 
 Now rules will be automatically generated/updated whenever dependencies are installed.
-
-### Programmatic Usage
-
-```typescript
-import { generateRules, checkAgent, analyze } from 'auto-cursor-rules';
-
-// Generate rules programmatically
-const result = await generateRules({
-  outputDir: '.cursor/rules',
-  verbose: true,
-  dryRun: false,
-  cwd: process.cwd(),
-});
-
-if (result.success) {
-  console.log('Created:', result.created);
-  console.log('Updated:', result.updated);
-  console.log('Unchanged:', result.unchanged);
-} else {
-  console.error('Error:', result.error);
-}
-
-// Check if cursor-agent is installed
-const agentCheck = await checkAgent();
-console.log('Installed:', agentCheck.installed);
-console.log('Version:', agentCheck.version);
-
-// Analyze without writing rules
-const analysisResult = await analyze(true);
-if (analysisResult.success) {
-  console.log('Analysis data:', analysisResult.data);
-}
-```
 
 ## How It Works
 
