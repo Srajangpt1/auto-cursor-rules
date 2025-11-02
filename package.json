@@ -1,0 +1,48 @@
+{
+  "name": "auto-cursor-rules",
+  "version": "0.1.0",
+  "description": "Automatically generate Cursor IDE rules by analyzing your codebase using cursor-agent CLI",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "auto-cursor-rules": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cursor",
+    "cursor-agent",
+    "cursor-rules",
+    "ai",
+    "code-analysis",
+    "automation",
+    "cli"
+  ],
+  "author": "Srajan Gupta",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.6",
+    "typescript": "^5.3.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/auto-cursor-rules.git"
+  }
+}
+
