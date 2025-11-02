@@ -7,8 +7,6 @@ on:
       - 'src/**'
       - 'lib/**'
       - 'package.json'
-  schedule:
-    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
   workflow_dispatch:  # Allow manual trigger
 
 permissions:
