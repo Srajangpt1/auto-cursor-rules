@@ -1,4 +1,4 @@
-name: Auto-Generate Cursor Rules
+name: Auto Generate Cursor Rules
 
 on:
   push:
