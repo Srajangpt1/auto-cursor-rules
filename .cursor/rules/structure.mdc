@@ -1,0 +1,42 @@
+---
+description: Directory organization, file naming, and module structure conventions
+alwaysApply: false
+---
+
+- **Directory Organization**: Source code in src/ directory. Compiled output in dist/ directory. Configuration files (package.json, tsconfig.json) at root. Documentation (README.md, LICENSE) at root. Use .cursor/rules/ for generated rules output.
+  - src/
+  ├── types.ts
+  ├── analyzer.ts
+  ├── rules-manager.ts
+  ├── cli.ts
+  └── index.ts
+  - dist/  (generated)
+.cursor/
+  rules/  (generated)
+
+- **File Naming Conventions**: Use kebab-case for file names: analyzer.ts, rules-manager.ts, cli.ts. Use descriptive names that indicate file purpose. Keep file names short but clear. Use .ts extension for TypeScript source files.
+  - analyzer.ts - cursor-agent integration
+  - rules-manager.ts - rules file management
+  - cli.ts - command-line interface
+
+- **Module Structure**: Each file should represent a single module with a clear responsibility. index.ts serves as the main entry point and re-exports public APIs. Group related functionality together. Keep modules focused and cohesive.
+  - index.ts - main API, re-exports types
+  - analyzer.ts - all cursor-agent interaction logic
+  - rules-manager.ts - all file system operations for rules
+
+- **Import/Export Patterns**: Use relative imports for local modules (./types, ./analyzer). Use absolute imports for node_modules. Export public API from index.ts. Keep internal implementation details private (don't export utility functions unless needed by other modules).
+  - import { generateRules } from './index';
+  - import { checkCursorAgent } from './analyzer';
+  - export * from './types';
+
+- **Entry Points**: index.ts is the main library entry point exporting public API. cli.ts is the CLI entry point (has shebang #!/usr/bin/env node). Package.json defines main (dist/index.js) and bin (dist/cli.js) entry points.
+  - // index.ts
+export async function generateRules(...) { }
+  - #!/usr/bin/env node
+// cli.ts
+import { Command } from 'commander';
+
+- **Configuration Files**: tsconfig.json at root with strict settings. package.json defines scripts, dependencies, and metadata. Keep configuration files at root level. Use standard naming conventions for config files.
+  - tsconfig.json - TypeScript compiler options
+  - package.json - npm/yarn package configuration
+

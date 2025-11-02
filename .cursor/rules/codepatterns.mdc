@@ -1,0 +1,67 @@
+---
+description: Code style conventions and patterns used throughout the TypeScript codebase
+globs: ["**/*.ts","**/*.js"]
+alwaysApply: false
+---
+
+- **Indentation Style**: Use 2 spaces for indentation, never tabs. All code files consistently use 2-space indentation.
+  - function example() {
+  const value = 1;
+  return value;
+}
+  - if (condition) {
+  doSomething();
+}
+
+- **Naming Conventions**: Use camelCase for functions, variables, and method names. Use PascalCase for interfaces, types, classes, and exported types. Use descriptive, clear names that indicate purpose.
+  - camelCase: generateRules, checkCursorAgent, readExistingRules
+  - PascalCase: GenerateRulesConfig, AnalysisResult, CursorAgentCheck, RuleCategory
+
+- **Function Documentation**: All exported functions must have JSDoc-style comments with /** */ syntax. Include a brief description of what the function does. Document parameters and return types in TypeScript types, not JSDoc tags.
+  - /**
+ * Check if cursor-agent is installed and accessible
+ */
+export async function checkCursorAgent(): Promise<CursorAgentCheck>
+  - /**
+ * Main function to generate cursor rules
+ */
+export async function generateRules(config: GenerateRulesConfig = {}): Promise<RulesManagerResult>
+
+- **Import Organization**: Group imports logically: Node.js built-ins first (if any), then external dependencies, then local imports. Use named imports for clarity. Keep import statements at the top of the file.
+  - import { spawn } from 'child_process';
+import chalk from 'chalk';
+import { Command } from 'commander';
+import { generateRules } from './index';
+  - import * as fs from 'fs';
+import * as path from 'path';
+import { AnalysisData, RulesManagerResult } from './types';
+
+- **Export Patterns**: Use named exports (export function, export const) rather than default exports. Export types and interfaces explicitly using export interface/export type. Re-export related items from index.ts using export *.
+  - export async function generateRules(...) { }
+  - export interface GenerateRulesConfig { }
+  - export * from './types';
+
+- **File Organization**: One major concern per file. Related functions grouped together. Files named with kebab-case for multi-word names, camelCase for single words. Each file should have a clear, singular responsibility.
+  - src/analyzer.ts - handles cursor-agent integration
+  - src/rules-manager.ts - handles file system operations for rules
+  - src/cli.ts - handles CLI interface
+
+- **Code Formatting**: Use consistent spacing around operators, after commas, and in object literals. Use trailing commas in multiline arrays and objects. Use semicolons at end of statements.
+  - const config: GenerateRulesConfig = {
+  outputDir: options.output,
+  verbose: options.verbose,
+  dryRun: options.dryRun,
+};
+  - const files = ['file1', 'file2', 'file3'];
+
+- **String Literals**: Use single quotes for string literals throughout the codebase. Use template literals (backticks) for multi-line strings and string interpolation.
+  - const message = 'Simple string';
+  - const path = path.join(baseDir, '.cursor', 'rules');
+  - const prompt = `Analyze this entire codebase...`;
+
+- **Conditional Logic**: Prefer early returns for error conditions. Use explicit boolean checks (=== true, === false) when clarity is needed. Use optional chaining and nullish coalescing where appropriate.
+  - if (!agentCheck.installed) {
+  return { success: false, error: '...' };
+}
+  - const alwaysApply = category.alwaysApply !== undefined ? category.alwaysApply : category.ruleType === 'always' ? true : false;
+

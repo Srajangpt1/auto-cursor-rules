@@ -1,0 +1,107 @@
+---
+description: Security considerations, performance patterns, code reusability, and DRY principles
+alwaysApply: true
+---
+
+- **Security - Environment Variables**: Never hardcode API keys or sensitive credentials. Always use environment variables for sensitive data (CURSOR_API_KEY). Inherit environment variables when spawning processes. Never pass sensitive data as command-line arguments.
+  - env: {
+  ...process.env, // Inherit all environment variables (includes CURSOR_API_KEY)
+  PATH: process.env.PATH || '',
+}
+  - // Security Note: Always use environment variables for API keys. Never pass them as command-line arguments.
+
+- **Security - Process Execution**: Use spawn for executing external commands rather than eval or exec with user input. Validate inputs before passing to external processes. Handle process errors and timeouts appropriately.
+  - const childProcess = spawn('cursor-agent', args, {
+  stdio: ['ignore', 'pipe', 'pipe'],
+  env: { ...process.env },
+});
+  - const timeoutId = setTimeout(() => {
+  childProcess.kill();
+  // handle timeout
+}, timeout);
+
+- **Performance - Timeout Handling**: Set reasonable timeouts for long-running operations (default 5 minutes). Always clear timeouts when operations complete. Kill processes that exceed timeout to prevent resource leaks.
+  - const timeout = 300000; // 5 minute default timeout
+  - const timeoutId = setTimeout(() => {
+  childProcess.kill();
+  resolve({ success: false, error: `Analysis timeout...` });
+}, timeout);
+  - childProcess.on('close', (code) => {
+  clearTimeout(timeoutId);
+  // ...
+});
+
+- **Performance - File Operations**: Use synchronous file operations (readFileSync, writeFileSync) when appropriate for CLI tools. Check file existence before reading. Use recursive directory creation when needed. Normalize paths for comparison operations.
+  - if (!fs.existsSync(rulesDir)) {
+  fs.mkdirSync(rulesDir, { recursive: true });
+}
+  - const normalize = (s: string) => s.trim().replace(/\s+/g, ' ');
+return normalize(existingContent) !== normalize(newContent);
+
+- **Code Reusability - Helper Functions**: Extract reusable logic into helper functions. Create utility functions for common operations (filename generation, content comparison, directory management). Keep functions pure when possible (no side effects).
+  - export function generateFilename(categoryName: string): string
+  - export function needsUpdate(existingContent: string, newContent: string): boolean
+  - export function ensureRulesDirectory(rulesDir: string): void
+
+- **DRY Principle - Data Structures**: Define shared data structures in types.ts to avoid duplication. Use consistent result object patterns across functions. Reuse type definitions rather than redefining similar structures.
+  - // Define once in types.ts
+export interface AnalysisResult { ... }
+  - // Reuse across modules
+import { AnalysisResult, RulesManagerResult } from './types';
+
+- **DRY Principle - Conversion Logic**: Centralize format conversion logic in single functions. Reuse conversion functions rather than duplicating logic. Create utility functions for repeated transformations.
+  - export function convertToMDC(categoryName: string, category: RuleCategory): string { ... }
+  - export function parseRawOutput(rawOutput: string): AnalysisData | null { ... }
+
+- **Error Recovery - Fallback Parsing**: Provide fallback mechanisms when primary operations fail. Attempt alternative parsing methods when primary method fails. Provide meaningful error messages that guide users toward solutions.
+  - // Try to parse raw output as fallback
+if (analysisResult.rawOutput) {
+  const parsedData = parseRawOutput(analysisResult.rawOutput);
+  if (parsedData) {
+    analysisResult.data = parsedData;
+    analysisResult.success = true;
+  }
+}
+  - const jsonMatch = stdout.match(/\{[\s\S]*\}/);
+if (!jsonMatch) {
+  // fallback logic
+}
+
+- **User Experience - Clear Messaging**: Provide clear, actionable error messages. Include installation instructions in error messages when tools are missing. Use color coding in CLI output for better UX. Show progress for long-running operations.
+  - console.error(chalk.red('\nError: cursor-agent is not installed or not in PATH'));
+console.log(chalk.yellow('\nTo install cursor-agent, run:'));
+console.log(chalk.white('  curl https://cursor.com/install -fsS | bash\n'));
+  - console.log(chalk.gray('Analyzing codebase with cursor-agent...'));
+console.log(chalk.gray('This may take a few minutes...\n'));
+
+- **Maintainability - Separation of Concerns**: Separate CLI logic from business logic. Keep file system operations separate from analysis logic. Separate type definitions into dedicated file. Keep modules focused on single responsibilities.
+  - cli.ts - handles CLI interface and user interaction
+  - analyzer.ts - handles cursor-agent integration
+  - rules-manager.ts - handles file system operations
+  - types.ts - central type definitions
+
+- **Maintainability - Configuration**: Use configuration objects for function parameters rather than many positional parameters. Provide sensible defaults. Allow configuration to be overridden. Document configuration options clearly.
+  - export interface GenerateRulesConfig {
+  outputDir?: string;
+  verbose?: boolean;
+  dryRun?: boolean;
+  cwd?: string;
+}
+  - const config: GenerateRulesConfig = {
+  outputDir: options.output,
+  verbose: options.verbose,
+  dryRun: options.dryRun,
+  cwd: options.cwd,
+};
+
+- **Code Quality - Type Safety**: Avoid any type. Use strict TypeScript settings. Define proper types for all data structures. Use type assertions only when necessary and with validation. Leverage TypeScript's type inference where appropriate.
+  - const data = parsed as AnalysisData; // after validation
+  - export interface RuleCategory {
+  title: string;
+  description?: string;
+  rules: Rule[];
+  globs?: string[];
+  alwaysApply?: boolean;
+  ruleType?: 'always' | 'auto-attached' | 'agent-requested' | 'manual';
+}
+

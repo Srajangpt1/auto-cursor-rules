@@ -1,0 +1,64 @@
+---
+description: Frameworks, libraries, and tools used in the project with their specific patterns and conventions
+globs: ["**/*"]
+alwaysApply: true
+---
+
+- **TypeScript Configuration**: Use strict TypeScript mode (strict: true). Target ES2020. Use CommonJS modules for Node.js compatibility. Enable declaration files for type definitions. Always define explicit return types for exported functions.
+  - export async function generateRules(config: GenerateRulesConfig = {}): Promise<RulesManagerResult>
+  - interface AnalysisResult {
+  success: boolean;
+  data?: AnalysisData;
+  error?: string;
+}
+
+- **Node.js Patterns**: Use Node.js built-in modules (child_process, fs, path) following Node.js conventions. Use spawn from child_process for executing external commands. Use fs.readFileSync/fs.writeFileSync for synchronous file operations when appropriate. Use path.join() for cross-platform path construction.
+  - import { spawn } from 'child_process';
+const process = spawn('cursor-agent', ['--version']);
+  - import * as fs from 'fs';
+import * as path from 'path';
+const filePath = path.join(baseDir, '.cursor', 'rules');
+
+- **Commander.js CLI Framework**: Use commander for CLI interface. Define commands and options with descriptive names and help text. Use .action() for command handlers. Structure CLI with main command and subcommands. Use chalk for colored output in CLI.
+  - const program = new Command();
+program
+  .name('auto-cursor-rules')
+  .description('...')
+  .option('-v, --verbose', 'Enable verbose logging', false)
+  .action(async (options) => { });
+  - program
+  .command('check')
+  .description('Check if cursor-agent is installed')
+  .action(async () => { });
+
+- **Chalk for Terminal Output**: Use chalk for colored terminal output to improve user experience. Use semantic color choices: green for success, red for errors, yellow for warnings, cyan for info, gray for secondary info. Use chalk.bold for emphasis.
+  - console.log(chalk.green('Success!'));
+  - console.error(chalk.red('Error: ...'));
+  - console.log(chalk.bold.cyan('\nAuto Cursor Rules Generator\n'));
+
+- **Promise-based Async Patterns**: Use async/await consistently, not Promise chains. Wrap spawn operations in Promise constructors for better control. Always handle errors in async functions with try-catch blocks.
+  - export async function checkCursorAgent(): Promise<CursorAgentCheck> {
+  return new Promise((resolve) => {
+    const process = spawn('cursor-agent', ['--version']);
+    // ... resolve/reject logic
+  });
+}
+  - try {
+  const result = await generateRules(config);
+} catch (error) {
+  // handle error
+}
+
+- **Type Definitions**: Define all types and interfaces in types.ts. Use descriptive interface names. Make properties optional (?) when they may not always be present. Use union types for literal values. Export all public types.
+  - export interface GenerateRulesConfig {
+  outputDir?: string;
+  verbose?: boolean;
+  dryRun?: boolean;
+  cwd?: string;
+}
+  - export interface CursorAgentCheck {
+  installed: boolean;
+  version?: string;
+  error?: string;
+}
+

@@ -1,0 +1,90 @@
+---
+description: Established coding conventions for error handling, async patterns, function organization, and type usage
+alwaysApply: true
+---
+
+- **Error Handling**: Always check for errors using instanceof Error before accessing error properties. Use instanceof Error before accessing .message. Return error objects with success: false and error message string. Log errors appropriately based on context (console.error for CLI, return error for library API).
+  - catch (error) {
+  return {
+    success: false,
+    error: error instanceof Error ? error.message : 'Unknown error occurred',
+  };
+}
+  - process.on('error', (err) => {
+  resolve({
+    installed: false,
+    error: err.message,
+  });
+});
+
+- **Async/Await Usage**: Always use async/await for asynchronous operations, never Promise chains (.then/.catch). Make async functions return Promise<T> with explicit type. Use try-catch blocks for error handling in async functions. Wrap callback-based APIs (like spawn) in Promise constructors.
+  - export async function generateRules(config: GenerateRulesConfig = {}): Promise<RulesManagerResult> {
+  try {
+    const result = await analyzeCodebase({ verbose });
+    // ...
+  } catch (error) {
+    // handle error
+  }
+}
+  - export async function checkCursorAgent(): Promise<CursorAgentCheck> {
+  return new Promise((resolve) => {
+    // callback-based logic
+  });
+}
+
+- **Function Organization**: Export functions at module level. Group related functions together. Use helper functions to break down complex logic. Keep functions focused on a single responsibility. Document exported functions with JSDoc comments.
+  - export async function generateRules(...) { }
+export async function checkAgent() { }
+export async function analyze(...) { }
+  - function createAnalysisPrompt(): string { }
+function parseRawOutput(rawOutput: string): AnalysisData | null { }
+
+- **TypeScript Type Usage**: Define interfaces for all data structures. Use optional properties (?) for values that may be undefined. Use explicit return types on all exported functions. Use union types for literal value sets. Avoid any type, use unknown if type is truly unknown.
+  - export interface AnalysisResult {
+  success: boolean;
+  data?: AnalysisData;
+  error?: string;
+  rawOutput?: string;
+}
+  - ruleType?: 'always' | 'auto-attached' | 'agent-requested' | 'manual';
+  - export async function generateRules(config: GenerateRulesConfig = {}): Promise<RulesManagerResult>
+
+- **Default Parameters**: Use default parameters for optional configuration options. Provide sensible defaults. Use object destructuring with defaults in function parameters.
+  - export async function generateRules(config: GenerateRulesConfig = {}): Promise<RulesManagerResult>
+  - export async function analyzeCodebase(options: AnalyzeOptions = {}): Promise<AnalysisResult> {
+  const { timeout = 300000, verbose = false } = options;
+}
+  - export async function analyze(verbose: boolean = false): Promise<AnalysisResult>
+
+- **Result Objects**: Use result objects with success boolean and additional data/error fields for function returns. This pattern allows for consistent error handling and data extraction. Include arrays for operation results (created, updated, unchanged).
+  - interface RulesManagerResult {
+  success: boolean;
+  created: string[];
+  updated: string[];
+  unchanged: string[];
+  error?: string;
+}
+  - return {
+  success: true,
+  created: ['file1.mdc'],
+  updated: [],
+  unchanged: [],
+};
+
+- **Verbose Logging Pattern**: Accept verbose boolean parameter for detailed logging. Check verbose flag before logging detailed information. Use console.log for verbose output, console.error for errors. Provide helpful progress messages during long operations.
+  - if (verbose) {
+  console.log(`Using cursor-agent: ${agentCheck.version}`);
+}
+  - if (verbose && analysisResult.success && analysisResult.data) {
+  console.log('Analysis successful, data received');
+}
+
+- **Dry Run Pattern**: Support dry-run mode for operations that modify files. Check dryRun flag before performing write operations. Log what would be done in dry-run mode. Return the same result structure whether dry-run or actual execution.
+  - if (!dryRun) {
+  fs.writeFileSync(filePath, mdc, 'utf-8');
+}
+result.created.push(filename);
+  - if (config.dryRun) {
+  console.log(chalk.yellow('DRY RUN MODE: No files will be written\n'));
+}
+
