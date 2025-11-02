@@ -44,6 +44,10 @@ export async function generateRules(
     // Analyze the codebase
     const analysisResult = await analyzeCodebase({ verbose });
 
+    if (verbose && analysisResult.success && analysisResult.data) {
+      console.log('Analysis successful, data received');
+    }
+
     if (!analysisResult.success) {
       // Try to parse raw output as fallback
       if (analysisResult.rawOutput) {
@@ -89,6 +93,7 @@ export async function generateRules(
 
     if (verbose) {
       console.log(`Output directory: ${rulesDir}`);
+      console.log('Analysis data keys:', Object.keys(analysisResult.data));
     }
 
     // Write the rules
@@ -98,6 +103,15 @@ export async function generateRules(
       dryRun,
       verbose
     );
+
+    if (verbose) {
+      console.log('Write result:', {
+        success: writeResult.success,
+        created: writeResult.created.length,
+        updated: writeResult.updated.length,
+        unchanged: writeResult.unchanged.length,
+      });
+    }
 
     return writeResult;
   } catch (error) {
