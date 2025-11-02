@@ -1,0 +1,78 @@
+name: Auto-Generate Cursor Rules
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'lib/**'
+      - 'package.json'
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
+  workflow_dispatch:  # Allow manual trigger
+
+permissions:
+  contents: write  # Need write permission to commit changes
+
+jobs:
+  update-cursor-rules:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for better analysis
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install cursor-agent
+        run: |
+          curl https://cursor.com/install -fsS | bash
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+      
+      - name: Verify cursor-agent installation
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          cursor-agent --version
+      
+      - name: Generate Cursor Rules
+        env:
+          CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
+        run: |
+          export PATH="$HOME/.local/bin:$PATH"
+          npx auto-cursor-rules --verbose
+      
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git diff --quiet .cursor/rules/ || echo "changed=true" >> $GITHUB_OUTPUT
+      
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .cursor/rules/
+          git commit -m "chore: update Cursor rules [skip ci]"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Summary
+        if: steps.check_changes.outputs.changed == 'true'
+        run: |
+          echo "✅ Cursor rules updated successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Changed Files:" >> $GITHUB_STEP_SUMMARY
+          git diff HEAD~1 --name-only .cursor/rules/ >> $GITHUB_STEP_SUMMARY
+      
+      - name: No changes
+        if: steps.check_changes.outputs.changed != 'true'
+        run: |
+          echo "ℹ️ No changes to Cursor rules" >> $GITHUB_STEP_SUMMARY
+

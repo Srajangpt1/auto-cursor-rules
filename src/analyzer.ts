@@ -167,6 +167,10 @@ export async function analyzeCodebase(
 
     const childProcess = spawn('cursor-agent', args, {
       stdio: ['ignore', 'pipe', 'pipe'],
+      env: {
+        ...process.env, // Inherit all environment variables (includes CURSOR_API_KEY)
+        PATH: process.env.PATH || '', // Ensure PATH is available
+      },
     });
 
     let stdout = '';

@@ -165,6 +165,28 @@ Then add to your PATH (add to `~/.zshrc` or `~/.bashrc`):
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
+### Authentication errors
+
+**Error**: `Authentication required` or `Invalid API key`
+
+**Solution**: cursor-agent requires authentication. There are two methods:
+
+**For Local Development**:
+```bash
+cursor-agent login
+```
+
+**For CI/CD / Automation**:
+1. Generate API key from [Cursor Dashboard](https://cursor.com) → Settings → Integrations → User API Keys
+2. Set environment variable:
+```bash
+export CURSOR_API_KEY=your_api_key_here
+```
+
+**⚠️ Security Note**: Always use environment variables for API keys. Never pass them as command-line arguments (e.g., `--api-key`), as they would be visible in process lists, shell history, and logs.
+
+For GitHub Actions, add `CURSOR_API_KEY` to your repository secrets.
+
 ### Analysis timeout
 
 **Error**: `Analysis timeout after 300 seconds`
