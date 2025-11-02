@@ -13,7 +13,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && chmod +x dist/cli.js",
     "watch": "tsc --watch",
     "prepare": "yarn build",
     "prepublishOnly": "yarn build",
