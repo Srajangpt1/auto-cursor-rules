@@ -87,5 +87,6 @@ export interface CursorAgentCheck {
 export interface AnalyzeOptions {
   timeout?: number;
   verbose?: boolean;
+  existingRules?: string;
 }
 

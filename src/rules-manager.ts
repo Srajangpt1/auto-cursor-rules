@@ -211,6 +211,18 @@ export function writeRules(
       }
     }
 
+    // Clean up old rule files that are no longer generated
+    const keepFiles = [
+      ...result.created,
+      ...result.updated,
+      ...result.unchanged,
+    ];
+    const removed = cleanupOldRules(rulesDir, keepFiles, dryRun, verbose);
+    
+    if (removed.length > 0 && verbose) {
+      console.log(`Removed ${removed.length} old rule file(s)`);
+    }
+
     return result;
   } catch (error) {
     return {

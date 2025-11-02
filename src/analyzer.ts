@@ -49,8 +49,26 @@ export async function checkCursorAgent(): Promise<CursorAgentCheck> {
 /**
  * Create a comprehensive analysis prompt for cursor-agent
  */
-function createAnalysisPrompt(): string {
-  return `Analyze this entire codebase thoroughly and provide comprehensive coding rules and guidelines. 
+function createAnalysisPrompt(existingRules?: string): string {
+  let prompt = `Analyze this entire codebase thoroughly and provide comprehensive coding rules and guidelines.`;
+  
+  if (existingRules) {
+    prompt += `
+
+EXISTING RULES:
+The following rules already exist for this codebase. Review them and:
+1. Keep rules that are still valid based on current code
+2. Update rules that need changes based on code evolution
+3. Remove rules that no longer apply
+4. Add new rules for patterns you discover
+
+${existingRules}
+
+Your analysis should be an intelligent diff - preserve what's still accurate, update what changed, remove what's obsolete, add what's new.
+`;
+  }
+  
+  prompt += ` 
 
 DO NOT WRITE ANY CODE OR MODIFY ANY FILES. Only analyze and provide insights.
 
@@ -146,6 +164,8 @@ Rule types:
 Set globs to appropriate file patterns when using "auto-attached" type.
 
 Be specific and provide actionable rules based on the actual code in this repository.`;
+  
+  return prompt;
 }
 
 /**
@@ -154,10 +174,10 @@ Be specific and provide actionable rules based on the actual code in this reposi
 export async function analyzeCodebase(
   options: AnalyzeOptions = {}
 ): Promise<AnalysisResult> {
-  const { timeout = 300000, verbose = false } = options; // 5 minute default timeout
+  const { timeout = 300000, verbose = false, existingRules } = options; // 5 minute default timeout
 
   return new Promise((resolve) => {
-    const prompt = createAnalysisPrompt();
+    const prompt = createAnalysisPrompt(existingRules);
     const args = ['chat', prompt, '-p', '--output-format', 'json'];
 
     if (verbose) {

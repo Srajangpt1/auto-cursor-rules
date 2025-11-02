@@ -104,15 +104,22 @@ Now rules will be automatically generated/updated whenever dependencies are inst
 ## How It Works
 
 1. **Checks cursor-agent**: Verifies that cursor-agent is installed and accessible
-2. **Analyzes Codebase**: Uses cursor-agent's AI to analyze:
+2. **Reads Existing Rules**: If rules already exist, they're loaded as context
+3. **Intelligent Analysis**: Uses cursor-agent's AI to analyze:
    - Code patterns and style conventions
    - Frameworks and libraries in use
    - Project structure and organization
    - Naming conventions
    - Best practices and common patterns
-3. **Generates Rules**: Creates structured markdown files with categorized rules
-4. **Smart Merging**: Compares with existing rules and only updates what's necessary
-5. **Writes to `.cursor/rules`**: Rules are automatically loaded by cursor-agent
+   - **With awareness of existing rules** - cursor-agent performs an intelligent diff:
+     - Keeps rules that are still valid
+     - Updates rules that need changes based on code evolution
+     - Removes rules that no longer apply
+     - Adds new rules for newly discovered patterns
+4. **Generates Rules**: Creates structured markdown files with categorized rules
+5. **Smart Merging**: Compares with existing rules and only updates changed files
+6. **Cleanup**: Removes rule files for patterns that no longer exist in the codebase
+7. **Writes to `.cursor/rules`**: Rules are automatically loaded by cursor-agent
 
 ## Generated Files
 

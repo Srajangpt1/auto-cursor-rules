@@ -41,8 +41,25 @@ export async function generateRules(
       console.log(`Using cursor-agent: ${agentCheck.version}`);
     }
 
-    // Analyze the codebase
-    const analysisResult = await analyzeCodebase({ verbose });
+    // Read existing rules to provide context to cursor-agent
+    const rulesDir = outputDir || getRulesDirectory(cwd);
+    const existingRuleFiles = readExistingRules(rulesDir);
+    
+    let existingRulesContext: string | undefined;
+    if (existingRuleFiles.length > 0) {
+      if (verbose) {
+        console.log(`Found ${existingRuleFiles.length} existing rule file(s)`);
+      }
+      existingRulesContext = existingRuleFiles
+        .map(file => `\n## ${file.filename}\n${file.content}`)
+        .join('\n\n---\n');
+    }
+
+    // Analyze the codebase with existing rules context
+    const analysisResult = await analyzeCodebase({ 
+      verbose,
+      existingRules: existingRulesContext 
+    });
 
     if (verbose && analysisResult.success && analysisResult.data) {
       console.log('Analysis successful, data received');
@@ -87,9 +104,6 @@ export async function generateRules(
         error: 'No analysis data returned',
       };
     }
-
-    // Determine output directory
-    const rulesDir = outputDir || getRulesDirectory(cwd);
 
     if (verbose) {
       console.log(`Output directory: ${rulesDir}`);
