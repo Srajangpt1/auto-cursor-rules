@@ -1,3 +1,11 @@
+# This workflow is an EXAMPLE for users of auto-cursor-rules.
+# Copy this file to your own repository to automatically generate Cursor rules.
+# 
+# IMPORTANT: You must set CURSOR_API_KEY in your repository secrets:
+# 1. Generate API key: https://cursor.com → Settings → Integrations → User API Keys
+# 2. Add to GitHub: Settings → Secrets and variables → Actions → New repository secret
+# 3. Name: CURSOR_API_KEY, Value: your_api_key
+
 name: Auto Generate Cursor Rules
 
 on:
@@ -51,12 +59,22 @@ jobs:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
         run: |
           export PATH="$HOME/.local/bin:$PATH"
+          if [ -z "$CURSOR_API_KEY" ]; then
+            echo "Error: CURSOR_API_KEY is not set"
+            echo "Add it at: https://github.com/${{ github.repository }}/settings/secrets/actions"
+            exit 1
+          fi
           auto-cursor-rules --verbose
+          if [ -d ".cursor/rules" ]; then
+            ls -la .cursor/rules/
+          fi
       
       - name: Check for changes
         id: check_changes
         run: |
-          git diff --quiet .cursor/rules/ || echo "changed=true" >> $GITHUB_OUTPUT
+          if [ -d ".cursor/rules" ]; then
+            git diff --quiet .cursor/rules/ || echo "changed=true" >> $GITHUB_OUTPUT
+          fi
       
       - name: Commit and push changes
         if: steps.check_changes.outputs.changed == 'true'
@@ -70,15 +88,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Summary
-        if: steps.check_changes.outputs.changed == 'true'
+        if: always()
         run: |
-          echo "✅ Cursor rules updated successfully!" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Changed Files:" >> $GITHUB_STEP_SUMMARY
-          git diff HEAD~1 --name-only .cursor/rules/ >> $GITHUB_STEP_SUMMARY
-      
-      - name: No changes
-        if: steps.check_changes.outputs.changed != 'true'
-        run: |
-          echo "ℹ️ No changes to Cursor rules" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.check_changes.outputs.changed }}" == "true" ]; then
+            echo "Cursor rules updated" >> $GITHUB_STEP_SUMMARY
+            git diff HEAD~1 --name-only .cursor/rules/ >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No changes to Cursor rules" >> $GITHUB_STEP_SUMMARY
+          fi
 

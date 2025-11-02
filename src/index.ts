@@ -49,6 +49,12 @@ export async function generateRules(
       if (analysisResult.rawOutput) {
         if (verbose) {
           console.log('Attempting to parse raw output...');
+          console.log('Raw output length:', analysisResult.rawOutput.length);
+          if (analysisResult.rawOutput.length < 500) {
+            console.log('Raw output:', analysisResult.rawOutput);
+          } else {
+            console.log('Raw output (first 500 chars):', analysisResult.rawOutput.substring(0, 500));
+          }
         }
         const parsedData = parseRawOutput(analysisResult.rawOutput);
         if (parsedData) {
