@@ -28,7 +28,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
       
       - name: Install cursor-agent
         run: |
@@ -40,12 +39,21 @@ jobs:
           export PATH="$HOME/.local/bin:$PATH"
           cursor-agent --version
       
+      - name: Install auto-cursor-rules from GitHub
+        run: |
+          git clone https://github.com/Srajangpt1/auto-cursor-rules.git /tmp/auto-cursor-rules
+          cd /tmp/auto-cursor-rules
+          corepack enable
+          yarn install
+          yarn build
+          yarn link
+      
       - name: Generate Cursor Rules
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
         run: |
           export PATH="$HOME/.local/bin:$PATH"
-          npx auto-cursor-rules --verbose
+          auto-cursor-rules --verbose
       
       - name: Check for changes
         id: check_changes

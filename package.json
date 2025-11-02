@@ -15,7 +15,8 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "prepublishOnly": "npm run build",
+    "prepare": "yarn build",
+    "prepublishOnly": "yarn build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

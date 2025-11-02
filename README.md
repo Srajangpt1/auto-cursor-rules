@@ -26,22 +26,31 @@ cursor-agent --version
 
 ## Installation
 
-### Option 1: Run with npx
+### Option 1: Run with npx (once published)
 
 ```bash
 npx auto-cursor-rules
 ```
 
-### Option 2: As a Project Dependency
+### Option 2: Install from GitHub (recommended for now)
+
+```bash
+# Clone and build
+git clone https://github.com/Srajangpt1/auto-cursor-rules.git
+cd auto-cursor-rules
+yarn install
+yarn build
+yarn link
+
+# Then in your project
+cd /path/to/your/project
+yarn link auto-cursor-rules
+```
+
+### Option 3: As a Project Dependency (once published)
 
 ```bash
 yarn add auto-cursor-rules --dev
-```
-
-### Option 3: Install from GitHub
-
-```bash
-yarn add github:Srajangpt1/auto-cursor-rules --dev
 ```
 
 ## Usage
