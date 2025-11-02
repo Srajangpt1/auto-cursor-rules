@@ -41,7 +41,7 @@ import { AnalysisData, RulesManagerResult } from './types';
   - export interface GenerateRulesConfig { }
   - export * from './types';
 
-- **File Organization**: One major concern per file. Related functions grouped together. Files named with kebab-case for multi-word names, camelCase for single words. Each file should have a clear, singular responsibility.
+- **File Organization**: One major concern per file. Related functions grouped together. Files named with kebab-case for multi-word names (e.g., rules-manager.ts), single words can use camelCase. Each file should have a clear, singular responsibility.
   - src/analyzer.ts - handles cursor-agent integration
   - src/rules-manager.ts - handles file system operations for rules
   - src/cli.ts - handles CLI interface
@@ -64,4 +64,16 @@ import { AnalysisData, RulesManagerResult } from './types';
   return { success: false, error: '...' };
 }
   - const alwaysApply = category.alwaysApply !== undefined ? category.alwaysApply : category.ruleType === 'always' ? true : false;
+
+- **CLI Error Handling**: In CLI entry points (cli.ts), use process.exit() with appropriate exit codes (1 for errors, 0 for success) after displaying error messages. Library functions should return error objects instead of exiting.
+  - if (!agentCheck.installed) {
+  console.error(chalk.red('Error: ...'));
+  process.exit(1);
+}
+  - // In library functions, return errors instead:
+return { success: false, error: '...' };
+
+- **Filename Comparison**: When comparing filenames for existence checks, use case-insensitive comparison by converting to lowercase. This prevents issues with case-sensitive file systems while maintaining compatibility.
+  - const existingFilenames = new Set(existingRules.map((r) => r.filename.toLowerCase()));
+  - const existingFile = existingRules.find((r) => r.filename.toLowerCase() === filename.toLowerCase());
 

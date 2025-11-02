@@ -34,10 +34,10 @@ alwaysApply: true
 
 - **Function Organization**: Export functions at module level. Group related functions together. Use helper functions to break down complex logic. Keep functions focused on a single responsibility. Document exported functions with JSDoc comments.
   - export async function generateRules(...) { }
-export async function checkAgent() { }
-export async function analyze(...) { }
+  - export async function checkAgent() { }
+  - export async function analyze(...) { }
   - function createAnalysisPrompt(): string { }
-function parseRawOutput(rawOutput: string): AnalysisData | null { }
+  - function parseRawOutput(rawOutput: string): AnalysisData | null { }
 
 - **TypeScript Type Usage**: Define interfaces for all data structures. Use optional properties (?) for values that may be undefined. Use explicit return types on all exported functions. Use union types for literal value sets. Avoid any type, use unknown if type is truly unknown.
   - export interface AnalysisResult {
@@ -71,12 +71,17 @@ function parseRawOutput(rawOutput: string): AnalysisData | null { }
   unchanged: [],
 };
 
-- **Verbose Logging Pattern**: Accept verbose boolean parameter for detailed logging. Check verbose flag before logging detailed information. Use console.log for verbose output, console.error for errors. Provide helpful progress messages during long operations.
+- **Verbose Logging Pattern**: Accept verbose boolean parameter for detailed logging. Check verbose flag before logging detailed information. Use console.log for verbose output, console.error for errors. Provide helpful progress messages during long operations. For large outputs, truncate and show length/preview.
   - if (verbose) {
   console.log(`Using cursor-agent: ${agentCheck.version}`);
 }
   - if (verbose && analysisResult.success && analysisResult.data) {
   console.log('Analysis successful, data received');
+}
+  - if (analysisResult.rawOutput.length < 500) {
+  console.log('Raw output:', analysisResult.rawOutput);
+} else {
+  console.log('Raw output (first 500 chars):', analysisResult.rawOutput.substring(0, 500));
 }
 
 - **Dry Run Pattern**: Support dry-run mode for operations that modify files. Check dryRun flag before performing write operations. Log what would be done in dry-run mode. Return the same result structure whether dry-run or actual execution.
@@ -86,5 +91,14 @@ function parseRawOutput(rawOutput: string): AnalysisData | null { }
 result.created.push(filename);
   - if (config.dryRun) {
   console.log(chalk.yellow('DRY RUN MODE: No files will be written\n'));
+}
+
+- **Nested JSON Parsing**: When parsing JSON from external tools, handle nested JSON structures. Check if the result is wrapped in a response object and extract the actual data. Support both direct JSON and string-encoded JSON within objects.
+  - let parsed = JSON.parse(jsonMatch[0]);
+if (parsed.result && typeof parsed.result === 'string') {
+  const resultMatch = parsed.result.match(/\{[\s\S]*\}/);
+  if (resultMatch) {
+    parsed = JSON.parse(resultMatch[0]);
+  }
 }
 
