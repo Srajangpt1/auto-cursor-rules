@@ -26,22 +26,22 @@ cursor-agent --version
 
 ## Installation
 
-### As a Project Dependency
+### Option 1: Run with npx
 
-**Using npm:**
 ```bash
-npm install auto-cursor-rules --save-dev
+npx auto-cursor-rules
 ```
 
-**Using yarn:**
+### Option 2: As a Project Dependency
+
 ```bash
 yarn add auto-cursor-rules --dev
 ```
 
-### Use with npx
+### Option 3: Install from GitHub
 
 ```bash
-npx auto-cursor-rules
+yarn add github:Srajangpt1/auto-cursor-rules --dev
 ```
 
 ## Usage
@@ -51,7 +51,11 @@ npx auto-cursor-rules
 Generate rules for your current project:
 
 ```bash
+# If installed locally
 auto-cursor-rules
+
+# Or use npx without installation
+npx auto-cursor-rules
 ```
 
 #### CLI Options
@@ -76,15 +80,23 @@ Commands:
 ```bash
 # Generate rules with verbose output
 auto-cursor-rules --verbose
+# or with npx
+npx auto-cursor-rules --verbose
 
 # Dry run to see what would be created
 auto-cursor-rules --dry-run
+# or with npx
+npx auto-cursor-rules --dry-run
 
 # Custom output directory
 auto-cursor-rules --output ./.cursor-rules
+# or with npx
+npx auto-cursor-rules --output ./.cursor-rules
 
 # Check if cursor-agent is installed
 auto-cursor-rules check
+# or with npx
+npx auto-cursor-rules check
 ```
 
 ### As a Postinstall Script
@@ -232,27 +244,10 @@ export PATH="$HOME/.local/bin:$PATH"
 
 ### Building from Source
 
-**Using npm:**
+
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/auto-cursor-rules.git
-cd auto-cursor-rules
-
-# Install dependencies
-npm install
-
-# Build
-npm run build
-
-# Test locally
-npm link
-auto-cursor-rules --help
-```
-
-**Using yarn:**
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/auto-cursor-rules.git
+git clone https://github.com/Srajangpt1/auto-cursor-rules.git
 cd auto-cursor-rules
 
 # Install dependencies
@@ -290,18 +285,13 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 MIT License - see [LICENSE](LICENSE) file for details
 
-## Related Projects
-
-- [Cursor IDE](https://cursor.com) - The AI-first code editor
-- [cursor-agent](https://cursor.com/docs/cli/overview) - Cursor's CLI agent
-
 ## Support
 
-- Documentation: https://github.com/yourusername/auto-cursor-rules
-- Issues: https://github.com/yourusername/auto-cursor-rules/issues
+- Documentation: https://github.com/Srajangpt1/auto-cursor-rules
+- Issues: https://github.com/Srajangpt1/auto-cursor-rules/issues
 - Cursor Docs: https://cursor.com/docs/cli/overview
 
 ---
 
-Made with ❤️ for the Cursor community
+Made with ❤️ FOR the Cursor community
 
