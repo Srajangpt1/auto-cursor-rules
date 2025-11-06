@@ -1,11 +1,11 @@
 {
-  "name": "auto-cursor-rules",
+  "name": "agent-rule-sync",
   "version": "0.1.0",
-  "description": "Automatically generate Cursor IDE rules by analyzing your codebase using cursor-agent CLI",
+  "description": "Automatically generate rules for your AI coding agent by analyzing your codebase",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "auto-cursor-rules": "dist/cli.js"
+    "agent-rule-sync": "dist/cli.js"
   },
   "files": [
     "dist",
@@ -49,7 +49,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Srajangpt1/auto-cursor-rules.git"
+    "url": "https://github.com/Srajangpt1/agent-rule-sync.git"
   }
 }
 

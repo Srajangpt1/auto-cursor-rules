@@ -256,7 +256,7 @@ export function createSummary(analysisData: AnalysisData): string {
 
   summary += `\n---\n\n`;
   summary += `Generated on: ${new Date().toISOString()}\n`;
-  summary += `Generator: auto-cursor-rules\n`;
+  summary += `Generator: agent-rule-sync\n`;
 
   return summary;
 }
