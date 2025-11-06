@@ -23,7 +23,7 @@ const filePath = path.join(baseDir, '.cursor', 'rules');
   - #!/usr/bin/env node
 const program = new Command();
 program
-  .name('auto-cursor-rules')
+  .name('agent-rule-sync')
   .description('...')
   .option('-v, --verbose', 'Enable verbose logging', false)
   .action(async (options) => { });
@@ -35,7 +35,7 @@ program
 - **Chalk for Terminal Output**: Use chalk for colored terminal output to improve user experience. Use semantic color choices: green for success, red for errors, yellow for warnings, cyan for info, gray for secondary info. Use chalk.bold for emphasis.
   - console.log(chalk.green('Success!'));
   - console.error(chalk.red('Error: ...'));
-  - console.log(chalk.bold.cyan('\nAuto Cursor Rules Generator\n'));
+  - console.log(chalk.bold.cyan('\nAgent Rule Sync\n'));
 
 - **Promise-based Async Patterns**: Use async/await consistently, not Promise chains. Wrap spawn operations in Promise constructors for better control. Always handle errors in async functions with try-catch blocks.
   - export async function checkCursorAgent(): Promise<CursorAgentCheck> {
@@ -62,4 +62,10 @@ program
   version?: string;
   error?: string;
 }
+
+- **ESLint Configuration**: Use TypeScript ESLint with strict type checking. Require explicit function return types (warn level). Disallow any type. Require await for promises. Allow console statements for CLI tools. Enforce const for variables that aren't reassigned.
+  - "@typescript-eslint/explicit-function-return-type": "warn"
+  - "@typescript-eslint/no-explicit-any": "error"
+  - "@typescript-eslint/no-floating-promises": "error"
+  - "no-console": "off"
 

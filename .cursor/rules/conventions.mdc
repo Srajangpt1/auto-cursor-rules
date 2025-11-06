@@ -93,12 +93,30 @@ result.created.push(filename);
   console.log(chalk.yellow('DRY RUN MODE: No files will be written\n'));
 }
 
-- **Nested JSON Parsing**: When parsing JSON from external tools, handle nested JSON structures. Check if the result is wrapped in a response object and extract the actual data. Support both direct JSON and string-encoded JSON within objects.
-  - let parsed = JSON.parse(jsonMatch[0]);
-if (parsed.result && typeof parsed.result === 'string') {
-  const resultMatch = parsed.result.match(/\{[\s\S]*\}/);
-  if (resultMatch) {
-    parsed = JSON.parse(resultMatch[0]);
+- **Nested JSON Parsing**: When parsing JSON from external tools, handle nested JSON structures. Check if the result is wrapped in a response object and extract the actual data. Support both direct JSON and string-encoded JSON within objects. Use type assertions with validation.
+  - let parsed = JSON.parse(jsonMatch[0]) as unknown;
+if (typeof parsed === 'object' && parsed !== null && 'result' in parsed) {
+  const wrapper = parsed as { result: unknown };
+  if (typeof wrapper.result === 'string') {
+    const resultMatch = wrapper.result.match(/\{[\s\S]*\}/);
+    if (resultMatch) {
+      parsed = JSON.parse(resultMatch[0]) as unknown;
+    }
   }
 }
+
+- **Process Stream Handling**: When handling process streams (stdout/stderr), accumulate output in string variables. Handle both stdout and stderr separately. Clear timeouts when processes close. Handle process errors separately from exit codes.
+  - let stdout = '';
+let stderr = '';
+childProcess.stdout.on('data', (data: Buffer) => {
+  stdout += data.toString();
+});
+childProcess.on('close', (code) => {
+  clearTimeout(timeoutId);
+  // handle result
+});
+childProcess.on('error', (err) => {
+  clearTimeout(timeoutId);
+  // handle error
+});
 
