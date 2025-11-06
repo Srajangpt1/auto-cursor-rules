@@ -45,10 +45,10 @@ jobs:
           export PATH="$HOME/.local/bin:$PATH"
           cursor-agent --version
       
-      - name: Install auto-cursor-rules from GitHub
+      - name: Install agent-rule-sync from GitHub
         run: |
-          git clone https://github.com/Srajangpt1/auto-cursor-rules.git /tmp/auto-cursor-rules
-          cd /tmp/auto-cursor-rules
+          git clone https://github.com/Srajangpt1/agent-rule-sync.git /tmp/agent-rule-sync
+          cd /tmp/agent-rule-sync
           corepack enable
           yarn install
           yarn build
@@ -64,7 +64,7 @@ jobs:
             echo "Add it at: https://github.com/${{ github.repository }}/settings/secrets/actions"
             exit 1
           fi
-          auto-cursor-rules --verbose
+          agent-rule-sync --verbose
           if [ -d ".cursor/rules" ]; then
             ls -la .cursor/rules/
           fi
