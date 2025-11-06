@@ -9,8 +9,8 @@ import { GenerateRulesConfig } from './types';
 const program = new Command();
 
 program
-  .name('auto-cursor-rules')
-  .description('Automatically generate Cursor IDE rules by analyzing your codebase')
+  .name('agent-rule-sync')
+  .description('Automatically generate and sync IDE rules by analyzing your codebase using AI agents')
   .version('0.1.0');
 
 program
@@ -19,7 +19,7 @@ program
   .option('-d, --dry-run', 'Show what would be done without writing files', false)
   .option('--cwd <path>', 'Working directory (default: current directory)')
   .action(async (options: { output?: string; verbose: boolean; dryRun: boolean; cwd?: string }) => {
-    console.log(chalk.bold.cyan('\nAuto Cursor Rules Generator\n'));
+    console.log(chalk.bold.cyan('\nAgent Rule Sync\n'));
 
     // Check if cursor-agent is installed
     console.log(chalk.gray('Checking for cursor-agent...'));

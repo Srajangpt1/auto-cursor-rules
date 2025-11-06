@@ -1,0 +1,48 @@
+# Source files (only publish dist/)
+src/
+tsconfig.json
+
+# Development files
+.eslintrc.json
+.eslintignore
+agents.md
+
+# Git files
+.git/
+.gitignore
+
+# GitHub workflows
+.github/
+
+# Cursor rules (generated, not needed in package)
+.cursor/
+
+# Node modules
+node_modules/
+
+# Yarn
+yarn.lock
+yarn-error.log
+
+# Build artifacts
+*.tsbuildinfo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Test files
+*.test.ts
+*.spec.ts
+test/
+tests/
+__tests__/
+
+# Coverage
+coverage/
+.nyc_output/
+
