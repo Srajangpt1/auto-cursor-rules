@@ -45,12 +45,13 @@ jobs:
           yarn install
           yarn build
           yarn link
+          # Add yarn global bin to PATH for subsequent steps
+          echo "$(yarn global bin)" >> $GITHUB_PATH
       
       - name: Generate Cursor Rules
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
         run: |
-          export PATH="$HOME/.local/bin:$HOME/.yarn/bin:$PATH"
           if [ -z "$CURSOR_API_KEY" ]; then
             echo "Error: CURSOR_API_KEY is not set"
             echo "Add it at: https://github.com/${{ github.repository }}/settings/secrets/actions"
