@@ -77,3 +77,7 @@ return { success: false, error: '...' };
   - const existingFilenames = new Set(existingRules.map((r) => r.filename.toLowerCase()));
   - const existingFile = existingRules.find((r) => r.filename.toLowerCase() === filename.toLowerCase());
 
+- **TypeScript Utility Types**: Use TypeScript utility types like ReturnType<> when appropriate to avoid duplicating type definitions. This maintains type safety while reducing redundancy.
+  - export function getExistingRules(cwd?: string): ReturnType<typeof readExistingRules>
+  - const timeoutId: ReturnType<typeof setTimeout> = setTimeout(...);
+
