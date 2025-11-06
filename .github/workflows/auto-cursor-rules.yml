@@ -46,7 +46,7 @@ jobs:
           yarn build
           yarn link
           # Add yarn global bin to PATH for subsequent steps
-          echo "$(yarn global bin)" >> $GITHUB_PATH
+          echo "$HOME/.yarn/bin" >> $GITHUB_PATH
       
       - name: Generate Cursor Rules
         env:
