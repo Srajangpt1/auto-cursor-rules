@@ -130,3 +130,15 @@ console.log(chalk.gray('This may take a few minutes...\n'));
   existingRules: existingRulesContext 
 });
 
+- **Summary File Generation**: Generate a README.md summary file that lists all rule categories with links and rule counts. Include generation timestamp and generator name. Update the summary when rules change.
+  - export function createSummary(analysisData: AnalysisData): string {
+  let summary = `# Cursor Rules - Auto Generated\n\n`;
+  summary += `This directory contains automatically generated rules for this codebase.\n\n`;
+  summary += `## Rule Categories\n\n`;
+  // ... generate links and counts
+  summary += `\n---\n\n`;
+  summary += `Generated on: ${new Date().toISOString()}\n`;
+  summary += `Generator: auto-cursor-rules\n`;
+  return summary;
+}
+

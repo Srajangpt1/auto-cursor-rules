@@ -18,7 +18,7 @@ program
   .option('-v, --verbose', 'Enable verbose logging', false)
   .option('-d, --dry-run', 'Show what would be done without writing files', false)
   .option('--cwd <path>', 'Working directory (default: current directory)')
-  .action(async (options) => {
+  .action(async (options: { output?: string; verbose: boolean; dryRun: boolean; cwd?: string }) => {
     console.log(chalk.bold.cyan('\nAuto Cursor Rules Generator\n'));
 
     // Check if cursor-agent is installed

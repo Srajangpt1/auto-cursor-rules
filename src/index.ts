@@ -158,7 +158,7 @@ export async function analyze(
 /**
  * Get existing rules from a directory
  */
-export function getExistingRules(cwd?: string) {
+export function getExistingRules(cwd?: string): ReturnType<typeof readExistingRules> {
   const rulesDir = getRulesDirectory(cwd);
   return readExistingRules(rulesDir);
 }

@@ -17,6 +17,9 @@
     "watch": "tsc --watch",
     "prepare": "yarn build",
     "prepublishOnly": "yarn build",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "type-check": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -39,6 +42,9 @@
   },
   "devDependencies": {
     "@types/node": "^20.10.6",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
     "typescript": "^5.3.3"
   },
   "repository": {
