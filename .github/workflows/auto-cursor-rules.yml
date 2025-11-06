@@ -50,7 +50,8 @@ jobs:
         env:
           CURSOR_API_KEY: ${{ secrets.CURSOR_API_KEY }}
         run: |
-          export PATH="$HOME/.local/bin:$HOME/.yarn/bin:$PATH"
+          # export PATH="$HOME/.local/bin:$HOME/.yarn/bin:$PATH"
+          export PATH="$HOME/.local/bin:$PATH"
           if [ -z "$CURSOR_API_KEY" ]; then
             echo "Error: CURSOR_API_KEY is not set"
             echo "Add it at: https://github.com/${{ github.repository }}/settings/secrets/actions"
