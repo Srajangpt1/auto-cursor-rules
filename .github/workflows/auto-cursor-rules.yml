@@ -1,12 +1,4 @@
-# This workflow is an EXAMPLE for users of agent-rule-sync.
-# Copy this file to your own repository to automatically generate Cursor rules.
-# 
-# IMPORTANT: You must set CURSOR_API_KEY in your repository secrets:
-# 1. Generate API key: https://cursor.com → Settings → Integrations → User API Keys
-# 2. Add to GitHub: Settings → Secrets and variables → Actions → New repository secret
-# 3. Name: CURSOR_API_KEY, Value: your_api_key
-
-name: Agent Rule Sync
+name: Agent Rules Sync
 
 on:
   pull_request:
