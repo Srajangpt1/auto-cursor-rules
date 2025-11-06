@@ -1,0 +1,47 @@
+name: Lint
+
+on:
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'package.json'
+      - 'tsconfig.json'
+      - '.github/workflows/lint.yml'
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+      
+      - name: Enable Corepack
+        run: corepack enable
+      
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      
+      - name: Run ESLint
+        run: yarn lint
+      
+      - name: Run TypeScript type check
+        run: yarn type-check
+      
+      - name: Summary
+        if: success()
+        run: |
+          echo "## ✅ Linting Passed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- ESLint: No issues found" >> $GITHUB_STEP_SUMMARY
+          echo "- TypeScript: No type errors" >> $GITHUB_STEP_SUMMARY
+
