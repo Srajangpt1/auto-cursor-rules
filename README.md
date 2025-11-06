@@ -1,6 +1,6 @@
-# Auto Cursor Rules
+# Agent Rule Sync
 
-Automatically generate [Cursor IDE](https://cursor.com) rules by analyzing your codebase using the cursor-agent CLI. This tool intelligently examines your project's code patterns, frameworks, structure, and conventions to create comprehensive, project-specific rules that enhance Cursor's AI assistance.
+Automatically generate and sync IDE rules by analyzing your codebase using AI agents. Currently supports [Cursor IDE](https://cursor.com) via cursor-agent CLI. This tool intelligently examines your project's code patterns, frameworks, structure, and conventions to create comprehensive, project-specific rules that enhance AI assistance.
 
 ## Features
 
@@ -29,28 +29,28 @@ cursor-agent --version
 ### Option 1: Run with npx (once published)
 
 ```bash
-npx auto-cursor-rules
+npx agent-rule-sync
 ```
 
 ### Option 2: Install from GitHub (recommended for now)
 
 ```bash
 # Clone and build
-git clone https://github.com/Srajangpt1/auto-cursor-rules.git
-cd auto-cursor-rules
+git clone https://github.com/Srajangpt1/agent-rule-sync.git
+cd agent-rule-sync
 yarn install
 yarn build
 yarn link
 
 # Then in your project
 cd /path/to/your/project
-yarn link auto-cursor-rules
+yarn link agent-rule-sync
 ```
 
 ### Option 3: As a Project Dependency (once published)
 
 ```bash
-yarn add auto-cursor-rules --dev
+yarn add agent-rule-sync --dev
 ```
 
 ## Usage
@@ -61,16 +61,16 @@ Generate rules for your current project:
 
 ```bash
 # If installed locally
-auto-cursor-rules
+agent-rule-sync
 
 # Or use npx without installation
-npx auto-cursor-rules
+npx agent-rule-sync
 ```
 
 #### CLI Options
 
 ```bash
-auto-cursor-rules [options]
+agent-rule-sync [options]
 
 Options:
   -o, --output <path>   Output directory for rules (default: .cursor/rules)
@@ -91,10 +91,10 @@ Add to your `package.json`:
 ```json
 {
   "scripts": {
-    "postinstall": "auto-cursor-rules"
+    "postinstall": "agent-rule-sync"
   },
   "devDependencies": {
-    "auto-cursor-rules": "^0.1.0"
+    "agent-rule-sync": "^0.1.0"
   }
 }
 ```
@@ -228,8 +228,8 @@ For GitHub Actions, add `CURSOR_API_KEY` to your repository secrets.
 
 ```bash
 # Clone the repository
-git clone https://github.com/Srajangpt1/auto-cursor-rules.git
-cd auto-cursor-rules
+git clone https://github.com/Srajangpt1/agent-rule-sync.git
+cd agent-rule-sync
 
 # Install dependencies
 yarn install
@@ -239,13 +239,13 @@ yarn build
 
 # Test locally
 yarn link
-auto-cursor-rules --help
+agent-rule-sync --help
 ```
 
 ### Project Structure
 
 ```
-auto-cursor-rules/
+agent-rule-sync/
 ├── src/
 │   ├── types.ts          # TypeScript type definitions
 │   ├── analyzer.ts       # cursor-agent integration
@@ -268,8 +268,8 @@ MIT License - see [LICENSE](LICENSE) file for details
 
 ## Support
 
-- Documentation: https://github.com/Srajangpt1/auto-cursor-rules
-- Issues: https://github.com/Srajangpt1/auto-cursor-rules/issues
+- Documentation: https://github.com/Srajangpt1/agent-rule-sync
+- Issues: https://github.com/Srajangpt1/agent-rule-sync/issues
 - Cursor Docs: https://cursor.com/docs/cli/overview
 
 ---

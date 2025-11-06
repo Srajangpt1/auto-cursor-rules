@@ -1,10 +1,10 @@
-# Agent Instructions for auto-cursor-rules
+# Agent Instructions for agent-rule-sync
 
-This document provides context and guidelines for AI coding agents working on the `auto-cursor-rules` project.
+This document provides context and guidelines for AI coding agents working on the `agent-rule-sync` project.
 
 ## Project Overview
 
-`auto-cursor-rules` is an npm package that automatically generates Cursor IDE rules by analyzing codebases using the `cursor-agent` CLI. It's built in TypeScript and designed to work both as a CLI tool and as a postinstall script.
+`agent-rule-sync` is an npm package that automatically generates Cursor IDE rules by analyzing codebases using the `cursor-agent` CLI. It's built in TypeScript and designed to work both as a CLI tool and as a postinstall script.
 
 ## Architecture
 
@@ -135,9 +135,9 @@ When making changes:
 
 ## GitHub Actions Workflows
 
-### auto-cursor-rules.yml
+### agent-rule-sync.yml
 - Triggers on pull requests (when src/, lib/, package.json change)
-- Installs cursor-agent and auto-cursor-rules from source
+- Installs cursor-agent and agent-rule-sync from source
 - Generates rules and commits them to the PR branch
 - Requires `CURSOR_API_KEY` in repository secrets
 
@@ -193,7 +193,7 @@ When making changes:
 - Add support for custom rule templates
 - Implement rule validation
 - Add support for multiple rule directories
-- Consider adding a configuration file (`.auto-cursor-rules.json`)
+- Consider adding a configuration file (`.agent-rule-sync.json`)
 - Add unit tests for core functionality
 - Consider publishing to npm registry
 
