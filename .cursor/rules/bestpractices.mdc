@@ -105,3 +105,40 @@ console.log(chalk.gray('This may take a few minutes...\n'));
   ruleType?: 'always' | 'auto-attached' | 'agent-requested' | 'manual';
 }
 
+- **File Format Support**: Support multiple rule file formats for backward compatibility. Check for .mdc (Cursor format), .md (legacy), and .txt files when reading existing rules. Generate new rules in .mdc format.
+  - if (file.endsWith('.mdc') || file.endsWith('.md') || file.endsWith('.txt')) {
+  const filePath = path.join(rulesDir, file);
+  const content = fs.readFileSync(filePath, 'utf-8');
+}
+  - return `${categoryName.toLowerCase().replace(/\s+/g, '-')}.mdc`;
+
+- **File Cleanup**: Automatically clean up old rule files that are no longer generated. Compare existing files against newly generated files. Only remove files that match rule file patterns (.mdc, .md, .txt) and are not in the keep list. Support dry-run mode for cleanup operations.
+  - const removed = cleanupOldRules(rulesDir, keepFiles, dryRun, verbose);
+  - if (!keepFilesSet.has(file.toLowerCase()) && 
+    (file.endsWith('.mdc') || file.endsWith('.md') || file.endsWith('.txt'))) {
+  if (!dryRun) {
+    fs.unlinkSync(path.join(rulesDir, file));
+  }
+}
+
+- **Context Passing**: When performing iterative updates, pass existing context to external tools for intelligent diffs. Load existing rules and provide them as context so the tool can preserve valid rules, update changed rules, and remove obsolete ones.
+  - const existingRulesContext = existingRuleFiles
+  .map(file => `\n## ${file.filename}\n${file.content}`)
+  .join('\n\n---\n');
+  - const analysisResult = await analyzeCodebase({ 
+  verbose,
+  existingRules: existingRulesContext 
+});
+
+- **Summary File Generation**: Generate a README.md summary file that lists all rule categories with links and rule counts. Include generation timestamp and generator name. Update the summary when rules change.
+  - export function createSummary(analysisData: AnalysisData): string {
+  let summary = `# Cursor Rules - Auto Generated\n\n`;
+  summary += `This directory contains automatically generated rules for this codebase.\n\n`;
+  summary += `## Rule Categories\n\n`;
+  // ... generate links and counts
+  summary += `\n---\n\n`;
+  summary += `Generated on: ${new Date().toISOString()}\n`;
+  summary += `Generator: auto-cursor-rules\n`;
+  return summary;
+}
+

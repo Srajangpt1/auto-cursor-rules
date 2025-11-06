@@ -5,11 +5,11 @@ alwaysApply: false
 
 - **Directory Organization**: Source code in src/ directory. Compiled output in dist/ directory. Configuration files (package.json, tsconfig.json) at root. Documentation (README.md, LICENSE) at root. Use .cursor/rules/ for generated rules output.
   - src/
-  ├── types.ts
-  ├── analyzer.ts
-  ├── rules-manager.ts
-  ├── cli.ts
-  └── index.ts
+├── types.ts
+├── analyzer.ts
+├── rules-manager.ts
+├── cli.ts
+└── index.ts
   - dist/  (generated)
 .cursor/
   rules/  (generated)
@@ -29,12 +29,15 @@ alwaysApply: false
   - import { checkCursorAgent } from './analyzer';
   - export * from './types';
 
-- **Entry Points**: index.ts is the main library entry point exporting public API. cli.ts is the CLI entry point (has shebang #!/usr/bin/env node). Package.json defines main (dist/index.js) and bin (dist/cli.js) entry points.
+- **Entry Points**: index.ts is the main library entry point exporting public API. cli.ts is the CLI entry point (has shebang #!/usr/bin/env node). Package.json defines main (dist/index.js) and bin (dist/cli.js) entry points. Build script should set executable permissions on CLI (chmod +x dist/cli.js).
   - // index.ts
 export async function generateRules(...) { }
   - #!/usr/bin/env node
 // cli.ts
 import { Command } from 'commander';
+  - "scripts": {
+  "build": "tsc && chmod +x dist/cli.js"
+}
 
 - **Configuration Files**: tsconfig.json at root with strict settings. package.json defines scripts, dependencies, and metadata. Keep configuration files at root level. Use standard naming conventions for config files.
   - tsconfig.json - TypeScript compiler options

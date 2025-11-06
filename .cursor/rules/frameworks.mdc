@@ -19,8 +19,9 @@ const process = spawn('cursor-agent', ['--version']);
 import * as path from 'path';
 const filePath = path.join(baseDir, '.cursor', 'rules');
 
-- **Commander.js CLI Framework**: Use commander for CLI interface. Define commands and options with descriptive names and help text. Use .action() for command handlers. Structure CLI with main command and subcommands. Use chalk for colored output in CLI.
-  - const program = new Command();
+- **Commander.js CLI Framework**: Use commander for CLI interface. Define commands and options with descriptive names and help text. Use .action() for command handlers. Structure CLI with main command and subcommands. Use chalk for colored output in CLI. Include shebang (#!/usr/bin/env node) at top of CLI entry point.
+  - #!/usr/bin/env node
+const program = new Command();
 program
   .name('auto-cursor-rules')
   .description('...')
@@ -49,7 +50,7 @@ program
   // handle error
 }
 
-- **Type Definitions**: Define all types and interfaces in types.ts. Use descriptive interface names. Make properties optional (?) when they may not always be present. Use union types for literal values. Export all public types.
+- **Type Definitions**: Define all types and interfaces in types.ts. Use descriptive interface names. Make properties optional (?) for values that may be undefined. Use union types for literal values. Export all public types.
   - export interface GenerateRulesConfig {
   outputDir?: string;
   verbose?: boolean;
