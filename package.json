@@ -29,7 +29,11 @@
     "ai",
     "code-analysis",
     "automation",
-    "cli"
+    "cli",
+    "ai",
+    "ide",
+    "coding-agents",
+    "agent-rule-sync"
   ],
   "author": "Srajan Gupta",
   "license": "MIT",
@@ -50,6 +54,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Srajangpt1/agent-rule-sync.git"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/Srajangpt1/agent-rule-sync/issues"
+  },
+  "homepage": "https://github.com/Srajangpt1/agent-rule-sync#readme"
 }
 
