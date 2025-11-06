@@ -99,7 +99,7 @@ export function needsUpdate(
   newContent: string
 ): boolean {
   // Simple comparison - can be made more sophisticated
-  const normalize = (s: string) => s.trim().replace(/\s+/g, ' ');
+  const normalize = (s: string): string => s.trim().replace(/\s+/g, ' ');
   return normalize(existingContent) !== normalize(newContent);
 }
 

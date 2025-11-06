@@ -15,11 +15,11 @@ export async function checkCursorAgent(): Promise<CursorAgentCheck> {
     let output = '';
     let errorOutput = '';
 
-    process.stdout.on('data', (data) => {
+    process.stdout.on('data', (data: Buffer) => {
       output += data.toString();
     });
 
-    process.stderr.on('data', (data) => {
+    process.stderr.on('data', (data: Buffer) => {
       errorOutput += data.toString();
     });
 
@@ -47,7 +47,7 @@ export async function checkCursorAgent(): Promise<CursorAgentCheck> {
 }
 
 /**
- * Create a comprehensive analysis prompt for cursor-agent
+ * Comprehensive analysis prompt for cursor-agent
  */
 function createAnalysisPrompt(existingRules?: string): string {
   let prompt = `Analyze this entire codebase thoroughly and provide comprehensive coding rules and guidelines.`;
@@ -196,7 +196,7 @@ export async function analyzeCodebase(
     let stdout = '';
     let stderr = '';
 
-    childProcess.stdout.on('data', (data) => {
+    childProcess.stdout.on('data', (data: Buffer) => {
       const chunk = data.toString();
       stdout += chunk;
       if (verbose) {
@@ -204,7 +204,7 @@ export async function analyzeCodebase(
       }
     });
 
-    childProcess.stderr.on('data', (data) => {
+    childProcess.stderr.on('data', (data: Buffer) => {
       const chunk = data.toString();
       stderr += chunk;
       if (verbose) {
@@ -247,15 +247,18 @@ export async function analyzeCodebase(
           return;
         }
 
-        let parsed = JSON.parse(jsonMatch[0]);
+        let parsed = JSON.parse(jsonMatch[0]) as unknown;
         
         // cursor-agent wraps the result in a response object with 'result' field
         // Extract the actual analysis data from the wrapper
-        if (parsed.result && typeof parsed.result === 'string') {
-          // The result is a JSON string inside the wrapper, parse it
-          const resultMatch = parsed.result.match(/\{[\s\S]*\}/);
-          if (resultMatch) {
-            parsed = JSON.parse(resultMatch[0]);
+        if (typeof parsed === 'object' && parsed !== null && 'result' in parsed) {
+          const wrapper = parsed as { result: unknown };
+          if (typeof wrapper.result === 'string') {
+            // The result is a JSON string inside the wrapper, parse it
+            const resultMatch = wrapper.result.match(/\{[\s\S]*\}/);
+            if (resultMatch) {
+              parsed = JSON.parse(resultMatch[0]) as unknown;
+            }
           }
         }
         
