@@ -120,3 +120,19 @@ childProcess.on('error', (err) => {
   // handle error
 });
 
+- **Promise Resolution Pattern**: When wrapping callback-based APIs in Promises, always resolve with result objects rather than rejecting. This allows callers to check success status rather than using try-catch for expected failures.
+  - return new Promise((resolve) => {
+  process.on('close', (code) => {
+    resolve({ installed: code === 0 });
+  });
+  process.on('error', (err) => {
+    resolve({ installed: false, error: err.message });
+  });
+});
+
+- **Type Assertion Safety**: When using type assertions (as), validate the structure first. Use typeof checks and property existence checks before asserting types. Prefer type guards over assertions when possible.
+  - if (typeof parsed === 'object' && parsed !== null && 'result' in parsed) {
+  const wrapper = parsed as { result: unknown };
+  // safe to use wrapper
+}
+

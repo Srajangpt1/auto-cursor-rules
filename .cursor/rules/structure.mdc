@@ -43,3 +43,10 @@ import { Command } from 'commander';
   - tsconfig.json - TypeScript compiler options
   - package.json - npm/yarn package configuration
 
+- **Type Definition Centralization**: All TypeScript interfaces and types should be defined in types.ts. This provides a single source of truth for type definitions and makes them easily importable across modules.
+  - // types.ts
+export interface GenerateRulesConfig { ... }
+export interface AnalysisResult { ... }
+  - // Other files
+import { GenerateRulesConfig, AnalysisResult } from './types';
+
