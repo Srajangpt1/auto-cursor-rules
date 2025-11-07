@@ -81,3 +81,12 @@ return { success: false, error: '...' };
   - export function getExistingRules(cwd?: string): ReturnType<typeof readExistingRules>
   - const timeoutId: ReturnType<typeof setTimeout> = setTimeout(...);
 
+- **Buffer Type Handling**: When handling Node.js Buffer objects from process streams, explicitly type them as Buffer in event handlers. Use .toString() method to convert Buffer to string.
+  - process.stdout.on('data', (data: Buffer) => {
+  output += data.toString();
+});
+  - childProcess.stdout.on('data', (data: Buffer) => {
+  const chunk = data.toString();
+  stdout += chunk;
+});
+
