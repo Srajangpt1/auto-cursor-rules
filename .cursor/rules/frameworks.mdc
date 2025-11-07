@@ -72,3 +72,8 @@ program
   - "prefer-const": "error"
   - "no-var": "error"
 
+- **Index File Re-exports**: Use index.ts as the main entry point to re-export public APIs from other modules. This provides a clean public API surface. Export types using export * from './types'.
+  - import { checkCursorAgent, analyzeCodebase } from './analyzer';
+import { getRulesDirectory, writeRules } from './rules-manager';
+export * from './types';
+
