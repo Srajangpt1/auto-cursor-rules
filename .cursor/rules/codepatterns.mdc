@@ -90,3 +90,7 @@ return { success: false, error: '...' };
   stdout += chunk;
 });
 
+- **Unused Variable Naming**: Prefix unused variables and parameters with underscore (_) to indicate they are intentionally unused. ESLint is configured to ignore variables matching the pattern '^_'.
+  - function example(_unusedParam: string, usedParam: number) { }
+  - const [_first, _second, third] = array;
+
