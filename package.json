@@ -1,6 +1,6 @@
 {
   "name": "agent-rule-sync",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Automatically generate rules for your AI coding agent by analyzing your codebase",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
