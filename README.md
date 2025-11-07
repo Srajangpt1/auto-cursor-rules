@@ -1,5 +1,9 @@
 # Agent Rule Sync
 
+[![npm version](https://badge.fury.io/js/agent-rule-sync.svg)](https://www.npmjs.com/package/agent-rule-sync)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js Version](https://img.shields.io/node/v/agent-rule-sync.svg)](https://nodejs.org)
+
 Automatically generate [Cursor IDE](https://cursor.com) rules by analyzing your codebase using the cursor-agent CLI. This tool intelligently examines your project's code patterns, frameworks, structure, and conventions to create comprehensive, project-specific rules that enhance Cursor's AI assistance.
 
 ## Features
@@ -26,31 +30,45 @@ cursor-agent --version
 
 ## Installation
 
-### Option 1: Run with npx (once published)
+### Option 1: Run with npx (Recommended)
+
+No installation needed! Just run:
 
 ```bash
 npx agent-rule-sync
 ```
 
-### Option 2: Install from GitHub (recommended for now)
+### Option 2: Install Globally
 
 ```bash
-# Clone and build
-git clone https://github.com/Srajangpt1/agent-rule-sync.git
-cd agent-rule-sync
-yarn install
-yarn build
-yarn link
+npm install -g agent-rule-sync
 
-# Then in your project
-cd /path/to/your/project
-yarn link agent-rule-sync
+# Then run anywhere
+agent-rule-sync
 ```
 
-### Option 3: As a Project Dependency (once published)
+### Option 3: Install as Project Dependency
 
 ```bash
-yarn add agent-rule-sync --dev
+# Using npm
+npm install --save-dev agent-rule-sync
+
+# Using yarn
+yarn add -D agent-rule-sync
+
+# Using pnpm
+pnpm add -D agent-rule-sync
+```
+
+Then add to your `package.json` scripts:
+
+```json
+{
+  "scripts": {
+    "generate-rules": "agent-rule-sync",
+    "postinstall": "agent-rule-sync"
+  }
+}
 ```
 
 ## Usage
@@ -83,23 +101,6 @@ Options:
 Commands:
   check                 Check if cursor-agent is installed and accessible
 ```
-
-### As a Postinstall Script
-
-Add to your `package.json`:
-
-```json
-{
-  "scripts": {
-    "postinstall": "agent-rule-sync"
-  },
-  "devDependencies": {
-    "agent-rule-sync": "^0.1.0"
-  }
-}
-```
-
-Now rules will be automatically generated/updated whenever dependencies are installed.
 
 ## How It Works
 
@@ -224,7 +225,6 @@ For GitHub Actions, add `CURSOR_API_KEY` to your repository secrets.
 ## Development
 
 ### Building from Source
-
 
 ```bash
 # Clone the repository
