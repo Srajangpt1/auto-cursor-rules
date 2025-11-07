@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node.js Version](https://img.shields.io/node/v/agent-rule-sync.svg)](https://nodejs.org)
 
-Automatically generate [Cursor IDE](https://cursor.com) rules by analyzing your codebase using the cursor-agent CLI. This tool intelligently examines your project's code patterns, frameworks, structure, and conventions to create comprehensive, project-specific rules that enhance Cursor's AI assistance.
+Automatically generate rules for coding agents (ex - cursor) by analyzing your codebase. This tool intelligently examines your project's code patterns, frameworks, structure, and conventions to create comprehensive, project-specific rules that enhance Cursor's AI assistance.
 
 ## Features
 
