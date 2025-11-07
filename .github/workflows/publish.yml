@@ -69,41 +69,42 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       
-      - name: Create Git tag
-        if: steps.version_check.outputs.version_changed == 'true'
-        run: |
-          VERSION=${{ steps.version_check.outputs.current_version }}
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "v$VERSION" -m "Release v$VERSION"
-          git push origin "v$VERSION"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      
       - name: Create GitHub Release
         if: steps.version_check.outputs.version_changed == 'true'
-        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e # v1.1.4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@c062e08bd532815e2082a85e87e3ef29c3e6d191 # v2.0.8
         with:
           tag_name: v${{ steps.version_check.outputs.current_version }}
-          release_name: Release v${{ steps.version_check.outputs.current_version }}
+          name: Release v${{ steps.version_check.outputs.current_version }}
           body: |
-            ## Changes in v${{ steps.version_check.outputs.current_version }}
+            ## 🎉 What's New in v${{ steps.version_check.outputs.current_version }}
             
-            See [CHANGELOG](https://github.com/${{ github.repository }}/compare/v${{ steps.version_check.outputs.previous_version }}...v${{ steps.version_check.outputs.current_version }}) for details.
+            Automatically generate rules for coding agents by analyzing your codebase.
             
-            ### Installation
+            ### 📦 Installation
+            
             ```bash
-            npm install agent-rule-sync@${{ steps.version_check.outputs.current_version }}
+            # Run with npx (no installation needed)
+            npx agent-rule-sync
+            
+            # Or install globally
+            npm install -g agent-rule-sync
+            
+            # Or as a dev dependency
+            npm install --save-dev agent-rule-sync
             ```
             
-            Or use with npx:
-            ```bash
-            npx agent-rule-sync@${{ steps.version_check.outputs.current_version }}
-            ```
+            ### 📝 Full Changelog
+            
+            See [commits since last release](https://github.com/${{ github.repository }}/compare/v${{ steps.version_check.outputs.previous_version }}...v${{ steps.version_check.outputs.current_version }})
+            
+            ### 📚 Documentation
+            
+            - [README](https://github.com/${{ github.repository }}#readme)
+            - [npm package](https://www.npmjs.com/package/agent-rule-sync)
           draft: false
           prerelease: false
+          generate_release_notes: true
+          token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Summary
         if: always()
