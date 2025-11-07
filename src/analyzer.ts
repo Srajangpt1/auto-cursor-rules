@@ -163,7 +163,9 @@ Rule types:
 
 Set globs to appropriate file patterns when using "auto-attached" type.
 
-Be specific and provide actionable rules based on the actual code in this repository.`;
+Be specific and provide actionable rules based on the actual code in this repository.
+
+Only update the specific rule if any code pattern, framework, structure, or convention is changed.`;
   
   return prompt;
 }

@@ -150,9 +150,29 @@ console.log(chalk.gray('This may take a few minutes...\n'));
   // process category
 }
 
-- **Type Assertion Safety**: When using type assertions (as), validate the structure first. Use typeof checks and property existence checks before asserting types. Prefer type guards over assertions when possible.
-  - if (typeof parsed === 'object' && parsed !== null && 'result' in parsed) {
-  const wrapper = parsed as { result: unknown };
-  // safe to use wrapper
-}
+- **Stream Output Forwarding**: When running external processes in verbose mode, forward stdout/stderr chunks to the parent process in real-time for better user feedback. Accumulate output for parsing while also displaying it.
+  - childProcess.stdout.on('data', (data: Buffer) => {
+  const chunk = data.toString();
+  stdout += chunk;
+  if (verbose) {
+    process.stdout.write(chunk);
+  }
+});
+
+- **Exit Code Handling**: Check process exit codes to determine success or failure. Non-zero exit codes indicate failure. Handle both exit codes and error events separately, as they can occur independently.
+  - process.on('close', (code) => {
+  if (code === 0 && output.trim()) {
+    resolve({ installed: true, version: output.trim() });
+  } else {
+    resolve({ installed: false, error: errorOutput || 'command not found' });
+  }
+});
+
+- **Set Data Structure Usage**: Use Set data structures for efficient membership testing when checking if items exist in collections. Convert to lowercase for case-insensitive comparisons.
+  - const existingFilenames = new Set(
+  existingRules.map((r) => r.filename.toLowerCase())
+);
+  - const keepFilesSet = new Set(
+  keepFiles.map((f) => f.toLowerCase())
+);
 
