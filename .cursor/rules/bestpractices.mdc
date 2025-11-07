@@ -176,3 +176,10 @@ console.log(chalk.gray('This may take a few minutes...\n'));
   keepFiles.map((f) => f.toLowerCase())
 );
 
+- **AlwaysApply Determination Logic**: When determining alwaysApply for rule categories, check explicit alwaysApply property first, then ruleType === 'always', then fall back to category name patterns (bestPractices and conventions default to true). This provides flexible configuration while maintaining sensible defaults.
+  - const alwaysApply = category.alwaysApply !== undefined 
+  ? category.alwaysApply 
+  : category.ruleType === 'always'
+  ? true
+  : (categoryName === 'bestPractices' || categoryName === 'conventions');
+
