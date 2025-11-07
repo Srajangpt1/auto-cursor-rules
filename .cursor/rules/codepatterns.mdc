@@ -90,3 +90,24 @@ return { success: false, error: '...' };
   stdout += chunk;
 });
 
+- **Unused Variable Naming**: Prefix unused variables and parameters with underscore (_) to indicate they are intentionally unused. ESLint is configured to ignore variables matching the pattern '^_'.
+  - function example(_unusedParam: string, usedParam: number) { }
+  - const [_first, _second, third] = array;
+
+- **Object Destructuring with Defaults**: Use object destructuring with default values in function parameters for configuration objects. Extract multiple properties at once with sensible defaults.
+  - const {
+  outputDir,
+  verbose = false,
+  dryRun = false,
+  cwd = process.cwd(),
+} = config;
+  - const { timeout = 300000, verbose = false, existingRules } = options;
+
+- **Array Method Chaining**: Use array methods like map(), filter(), find() with arrow functions for concise data transformations. Chain methods when appropriate for readability.
+  - const existingFilenames = new Set(
+  existingRules.map((r) => r.filename.toLowerCase())
+);
+  - existingRulesContext = existingRuleFiles
+  .map(file => `\n## ${file.filename}\n${file.content}`)
+  .join('\n\n---\n');
+
